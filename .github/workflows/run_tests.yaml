@@ -1,0 +1,41 @@
+#.github/workflows/run_tests.yml
+
+name: Run Pytest Validation Suite
+
+# This workflow triggers on any push or pull request to the main branch.
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    # The type of runner that the job will run on.
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checks out your repository under $GITHUB_WORKSPACE, so your job can access it.
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Sets up a Python environment for use in actions.
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    # Step 3: Installs project dependencies from the requirements.txt file.
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # Step 4: Runs the pytest suite.
+    # The API key is passed as an environment variable using a GitHub Secret.
+    # This prevents the key from being exposed in logs or source code.
+    - name: Run tests
+      run: |
+        pytest
+      env:
+        ALPHAVANTAGE_API_KEY: ${{ secrets.ALPHAVANTAGE_API_KEY }}
