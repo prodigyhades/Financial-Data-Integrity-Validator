@@ -3,3 +3,4 @@ pandas
 pytest
 python-dotenv
 requests
+pytest-mock

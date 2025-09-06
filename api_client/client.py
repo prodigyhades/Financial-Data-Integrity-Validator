@@ -25,7 +25,7 @@ class AlphaVantageClient:
             raise ValueError("ALPHAVANTAGE_API_KEY environment variable not set.")
         
         # Initialize the TimeSeries client from the alpha-vantage library
-        # We specify pandas DataFrame as the desired output format for easy analysis.
+        # Automatically format the JSON data from the API into a clean Pandas DataFrame
         self._ts = TimeSeries(key=self.api_key, output_format='pandas')
 
     def get_daily(self, symbol: str) -> pd.DataFrame:
@@ -59,11 +59,11 @@ class AlphaVantageClient:
                 '5. volume': 'volume'
             }, inplace=True)
 
-            # Convert column types to appropriate numeric formats for validation
+            # Convert column types to appropriate numeric formats for validation, the API returns all values as text strings.
             for col in ['open', 'high', 'low', 'close']:
                 data[col] = pd.to_numeric(data[col])
             data['volume'] = pd.to_numeric(data['volume'], downcast='integer')
-            
+            # The volume is also converted to a numeric type, with downcast='integer' attempting to use the most memory-efficient integer type possible.
             return data
         
         except Exception as e:
