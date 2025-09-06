@@ -37,6 +37,7 @@ jobs:
     # Step 3: Installs project dependencies from the requirements.txt file.
     # NOTE: | is a YAML feature that lets you provide a multi-line string, making it easy to 
     # write a short script, just as you would in a terminal.
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
